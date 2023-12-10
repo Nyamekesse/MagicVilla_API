@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MagicVilla_VillaApi.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20231210020704_initial-database-setup")]
-    partial class initialdatabasesetup
+    [Migration("20231210032421_AddVillaTable")]
+    partial class AddVillaTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,7 +38,7 @@ namespace MagicVilla_VillaApi.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Details")
                         .IsRequired()
@@ -62,7 +62,7 @@ namespace MagicVilla_VillaApi.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
