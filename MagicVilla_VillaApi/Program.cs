@@ -1,3 +1,4 @@
+using MagicVilla_VillaApi;
 using MagicVilla_VillaApi.Data;
 using MagicVilla_VillaApi.Logging;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ builder.Services.AddControllers().AddNewtonsoftJson().AddXmlDataContractSerializ
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<ILogging, Logging>();
+builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 var app = builder.Build();
 
