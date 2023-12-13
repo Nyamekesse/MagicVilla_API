@@ -21,7 +21,7 @@ namespace MagicVilla_VillaApi.Repository
             await SaveAsync();
         }
 
-        public async Task<T> GetVillaAsync(Expression<Func<T, bool>> filter = null, bool tracked = true)
+        public async Task<T> GetAsync(Expression<Func<T, bool>> filter = null, bool tracked = true)
         {
             IQueryable<T> query = dbSet;
             if (!tracked)
@@ -36,7 +36,7 @@ namespace MagicVilla_VillaApi.Repository
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<List<T>> GetAllVillasAsync(Expression<Func<T, bool>>? filter = null)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null)
         {
             IQueryable<T> query = dbSet;
 

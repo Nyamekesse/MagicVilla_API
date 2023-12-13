@@ -5,6 +5,12 @@ namespace MagicVilla_VillaApi.Models
 {
     public class Villa
     {
+        public Villa()
+        {
+            CreatedDate = DateTime.UtcNow;
+            UpdatedDate = DateTime.UtcNow;
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }

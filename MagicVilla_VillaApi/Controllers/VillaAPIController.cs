@@ -26,12 +26,12 @@ namespace MagicVilla_VillaApi.Controllers
             this._response = new();
         }
 
-        [HttpGet]
-        public async Task<ActionResult<APIResponse>> GetVillas()
+        [HttpGet(Name = "GetAllVillas")]
+        public async Task<ActionResult<APIResponse>> GetAllVillas()
         {
             try
             {
-                IEnumerable<Villa> villalist = await _dbVilla.GetAllVillasAsync();
+                IEnumerable<Villa> villalist = await _dbVilla.GetAllAsync();
                 _response.Result = _mapper.Map<List<VillaDTO>>(villalist);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -46,12 +46,12 @@ namespace MagicVilla_VillaApi.Controllers
 
         }
 
-        [HttpGet("{id:int}", Name = "GetVilla")]
+        [HttpGet("{id:int}", Name = "GetVillaById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<APIResponse>> GetVilla(int id)
+        public async Task<ActionResult<APIResponse>> GetVillaById(int id)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace MagicVilla_VillaApi.Controllers
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest; return BadRequest();
                 }
-                var villa = await _dbVilla.GetVillaAsync(villa => villa.Id == id);
+                var villa = await _dbVilla.GetAsync(villa => villa.Id == id);
                 if (villa == null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -85,7 +85,7 @@ namespace MagicVilla_VillaApi.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CreateVilla([FromBody] VillaCreateDTO createDTO)
+        public async Task<ActionResult<APIResponse>> CreateNewVilla([FromBody] VillaCreateDTO createDTO)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace MagicVilla_VillaApi.Controllers
                     return _response;
                 }
 
-                if (await _dbVilla.GetVillaAsync(villa => villa.Name.ToLower() == createDTO.Name.ToLower()) != null)
+                if (await _dbVilla.GetAsync(villa => villa.Name.ToLower() == createDTO.Name.ToLower()) != null)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.ErrorMessages = [$"Villa with the name {createDTO.Name} already Exists!"];
@@ -110,7 +110,7 @@ namespace MagicVilla_VillaApi.Controllers
                 await _dbVilla.CreateAsync(villa);
                 _response.Result = villa;
                 _response.StatusCode = HttpStatusCode.Created;
-                return CreatedAtRoute("GetVilla", new { id = villa.Id }, _response);
+                return (_response);
             }
             catch (Exception ex)
             {
@@ -123,10 +123,10 @@ namespace MagicVilla_VillaApi.Controllers
 
         }
 
-        [HttpDelete("{id:int}", Name = "DeleteVilla")]
+        [HttpDelete("{id:int}", Name = "DeleteVillaById")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> DeleteVilla(int id)
+        public async Task<ActionResult<APIResponse>> DeleteVillaById(int id)
         {
             try
             {
@@ -134,7 +134,7 @@ namespace MagicVilla_VillaApi.Controllers
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest; return BadRequest();
                 }
-                var villa = await _dbVilla.GetVillaAsync(u => u.Id == id);
+                var villa = await _dbVilla.GetAsync(u => u.Id == id);
                 if (villa == null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound; return NotFound();
@@ -198,7 +198,7 @@ namespace MagicVilla_VillaApi.Controllers
                     _response.IsSuccess = false;
                     return _response;
                 }
-                var villa = await _dbVilla.GetVillaAsync(u => u.Id == id, tracked: false);
+                var villa = await _dbVilla.GetAsync(u => u.Id == id, tracked: false);
                 if (villa == null)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
