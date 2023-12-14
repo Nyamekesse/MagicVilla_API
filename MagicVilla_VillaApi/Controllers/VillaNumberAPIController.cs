@@ -10,12 +10,13 @@ namespace MagicVilla_VillaApi.Controllers
 {
     [Route("/api/VillaNumberApi")]
     [ApiController]
-    public class VillaNumberAPIController(ILogging logger, IMapper mapper, IVillaNumberRepository dbVillaNumber) : ControllerBase
+    public class VillaNumberAPIController(ILogging logger, IMapper mapper, IVillaNumberRepository dbVillaNumber, IVillaRepository dbVilla) : ControllerBase
     {
         private readonly ILogging _logger = logger;
         private readonly IMapper _mapper = mapper;
         private readonly IVillaNumberRepository _dbVillaNumber = dbVillaNumber;
         protected APIResponse _response = new();
+        private readonly IVillaRepository _dbVilla = dbVilla;
 
         [HttpGet(Name = "GetAllVillaNumbers")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -97,6 +98,13 @@ namespace MagicVilla_VillaApi.Controllers
                     _response.IsSuccess = false;
                     return _response;
                 }
+                if (await _dbVilla.GetAsync(villa => villa.Id == createDTO.VillaId) == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorMessages = ["Villa not found"];
+                    return (_response);
+                }
                 VillaNumber villaNumber = _mapper.Map<VillaNumber>(createDTO);
                 await _dbVillaNumber.CreateAsync(villaNumber);
                 _response.Result = villaNumber;
@@ -157,7 +165,7 @@ namespace MagicVilla_VillaApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<ActionResult<APIResponse>> UpdateVillaNumber([FromBody] VillaNumberCreateDTO updateDTO, int id)
+        public async Task<ActionResult<APIResponse>> UpdateVillaNumber([FromBody] VillaNumberUpdateDTO updateDTO, int id)
         {
             try
             {
@@ -167,6 +175,13 @@ namespace MagicVilla_VillaApi.Controllers
                     _response.IsSuccess = false;
                     _response.ErrorMessages = ["Id provided does not match"];
                     return _response;
+                }
+                if (await _dbVilla.GetAsync(villa => villa.Id == updateDTO.VillaId) == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.ErrorMessages = ["Villa not found"];
+                    return (_response);
                 }
 
                 VillaNumber modelToUpdate = _mapper.Map<VillaNumber>(updateDTO);
