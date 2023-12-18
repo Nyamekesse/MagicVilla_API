@@ -19,7 +19,7 @@ namespace MagicVilla_VillaApi.Controllers.v1
         protected APIResponse _response = new();
         private readonly IVillaRepository _dbVilla = dbVilla;
 
-        [HttpGet(Name = "GetAllVillaNumbers")]
+        [HttpGet("GetAllVillaNumbers")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> GetAllVillaNumbers()
         {
@@ -37,6 +37,13 @@ namespace MagicVilla_VillaApi.Controllers.v1
                 _response.ErrorMessages = [ex.ToString()];
             }
             return _response;
+        }
+
+        [HttpGet("GetString")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public IEnumerable<string> Get()
+        {
+            return new string[] { "string1", "string2" };
         }
 
         [HttpGet("{id:int}", Name = "GetVillaNumberById")]

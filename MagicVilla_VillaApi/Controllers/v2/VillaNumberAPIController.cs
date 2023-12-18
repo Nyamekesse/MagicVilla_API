@@ -12,11 +12,11 @@ namespace MagicVilla_VillaApi.Controllers.v2
         protected APIResponse _response = new();
 
 
-        [HttpGet]
+        [HttpGet("GetString")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new string[] { "Bhrugen", "DotNetMastery" };
         }
 
 
