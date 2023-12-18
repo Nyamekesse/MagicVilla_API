@@ -29,6 +29,7 @@ namespace MagicVilla_VillaApi.Controllers
 
         [HttpGet(Name = "GetAllVillas")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<APIResponse>> GetAllVillas()
         {
             try
