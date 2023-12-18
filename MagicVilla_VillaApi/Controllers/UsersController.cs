@@ -7,8 +7,9 @@ using System.Net;
 
 namespace MagicVilla_VillaApi.Controllers
 {
-    [Route("/api/UsersAuth")]
+    [Route("/api/v{version:apiVersion}/UsersAuth")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class UsersController(IUserRepository userRepository, ILogging logger) : ControllerBase
     {
         private readonly IUserRepository _userRepository = userRepository;
