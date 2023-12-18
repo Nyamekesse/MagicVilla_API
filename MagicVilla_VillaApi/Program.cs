@@ -18,8 +18,8 @@ builder.Services.AddControllers().AddNewtonsoftJson().AddXmlDataContractSerializ
 builder.Services.AddScoped<IVillaRepository, VillaRepository>();
 builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSingleton<ILogging, Logging>();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddApiVersioning(options =>
 {
@@ -57,6 +57,9 @@ builder.Services.AddSwaggerGen(options =>
            new List<string>()
         }
     });
+
+    options.SwaggerDoc("v1", new OpenApiInfo { Version = "v1.0", Title = "Magic Villa V1", Description = "API to manage Villa" });
+    options.SwaggerDoc("v2", new OpenApiInfo { Version = "v2.0", Title = "Magic Villa V2", Description = "API to manage Villa" });
 });
 builder.Services.AddAuthentication(x =>
 {
@@ -82,7 +85,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Magic_VillaV1");
+        options.SwaggerEndpoint("/swagger/v2/swagger.json", "Magic_VillaV2");
+    });
 }
 
 app.UseHttpsRedirection();

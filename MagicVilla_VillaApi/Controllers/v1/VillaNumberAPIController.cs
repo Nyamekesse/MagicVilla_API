@@ -6,12 +6,11 @@ using MagicVilla_VillaApi.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace MagicVilla_VillaApi.Controllers
+namespace MagicVilla_VillaApi.Controllers.v1
 {
     [Route("/api/v{version:apiVersion}/VillaNumberApi")]
     [ApiController]
     [ApiVersion("1.0")]
-    [ApiVersion("2.0")]
     public class VillaNumberAPIController(ILogging logger, IMapper mapper, IVillaNumberRepository dbVillaNumber, IVillaRepository dbVilla) : ControllerBase
     {
         private readonly ILogging _logger = logger;
@@ -21,7 +20,6 @@ namespace MagicVilla_VillaApi.Controllers
         private readonly IVillaRepository _dbVilla = dbVilla;
 
         [HttpGet(Name = "GetAllVillaNumbers")]
-        [MapToApiVersion("1.0")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> GetAllVillaNumbers()
         {
@@ -39,14 +37,6 @@ namespace MagicVilla_VillaApi.Controllers
                 _response.ErrorMessages = [ex.ToString()];
             }
             return _response;
-        }
-
-        [HttpGet]
-        [MapToApiVersion("2.0")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
         }
 
         [HttpGet("{id:int}", Name = "GetVillaNumberById")]
@@ -113,13 +103,13 @@ namespace MagicVilla_VillaApi.Controllers
                     _response.IsSuccess = false;
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.ErrorMessages = ["Villa not found"];
-                    return (_response);
+                    return _response;
                 }
                 VillaNumber villaNumber = _mapper.Map<VillaNumber>(createDTO);
                 await _dbVillaNumber.CreateAsync(villaNumber);
                 _response.Result = villaNumber;
                 _response.StatusCode = HttpStatusCode.Created;
-                return (_response);
+                return _response;
             }
             catch (Exception ex)
             {
@@ -191,7 +181,7 @@ namespace MagicVilla_VillaApi.Controllers
                     _response.IsSuccess = false;
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.ErrorMessages = ["Villa not found"];
-                    return (_response);
+                    return _response;
                 }
 
                 VillaNumber modelToUpdate = _mapper.Map<VillaNumber>(updateDTO);

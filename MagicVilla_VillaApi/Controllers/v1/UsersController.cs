@@ -5,7 +5,7 @@ using MagicVilla_VillaApi.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace MagicVilla_VillaApi.Controllers
+namespace MagicVilla_VillaApi.Controllers.v1
 {
     [Route("/api/v{version:apiVersion}/UsersAuth")]
     [ApiController]

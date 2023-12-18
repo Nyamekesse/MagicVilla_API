@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 
-namespace MagicVilla_VillaApi.Controllers
+namespace MagicVilla_VillaApi.Controllers.v1
 {
     [Route("api/v{version:apiVersion}/VillaAPI")]
     [ApiController]
@@ -25,7 +25,7 @@ namespace MagicVilla_VillaApi.Controllers
             _logger = logger;
             _dbVilla = dbVilla;
             _mapper = mapper;
-            this._response = new();
+            _response = new();
         }
 
         [HttpGet(Name = "GetAllVillas")]
@@ -115,7 +115,7 @@ namespace MagicVilla_VillaApi.Controllers
                 await _dbVilla.CreateAsync(villa);
                 _response.Result = villa;
                 _response.StatusCode = HttpStatusCode.Created;
-                return (_response);
+                return _response;
             }
             catch (Exception ex)
             {
