@@ -33,7 +33,7 @@ namespace MagicVilla_VillaApi.Controllers.v1
         [ResponseCache(Duration = 30)]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<APIResponse>> GetAllVillas([FromQuery(Name = "filterOccupancy")] int? occupancy, [FromQuery] string? search, int pageSize = 3, int pageNumber = 1)
+        public async Task<ActionResult<APIResponse>> GetAllVillas([FromQuery(Name = "filterOccupancy")] int? occupancy, [FromQuery] string? search, int pageSize = 0, int pageNumber = 1)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace MagicVilla_VillaApi.Controllers.v1
                 }
                 if (!string.IsNullOrEmpty(search))
                 {
-                    villalist = villalist.Where(villa => villa.Name.ToLower().Contains(search.ToLower()));
+                    villalist = villalist.Where(villa => villa.Name.Contains(search, StringComparison.CurrentCultureIgnoreCase));
                 }
                 Pagination pagination = new() { PageNumber = pageNumber, PageSize = pageSize };
                 Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(pagination));
