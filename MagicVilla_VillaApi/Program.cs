@@ -21,6 +21,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddSingleton<ILogging, Logging>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
+builder.Services.AddResponseCaching();
 builder.Services.AddApiVersioning(options =>
 {
     options.AssumeDefaultVersionWhenUnspecified = true;
