@@ -1,6 +1,7 @@
 using MagicVilla_VillaApi;
 using MagicVilla_VillaApi.Data;
 using MagicVilla_VillaApi.Logging;
+using MagicVilla_VillaApi.Models;
 using MagicVilla_VillaApi.Repository;
 using MagicVilla_VillaApi.Repository.IRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,7 +24,7 @@ builder.Services.AddSingleton<ILogging, Logging>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddResponseCaching();
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDBContext>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDBContext>();
 builder.Services.AddApiVersioning(options =>
 {
     options.AssumeDefaultVersionWhenUnspecified = true;
