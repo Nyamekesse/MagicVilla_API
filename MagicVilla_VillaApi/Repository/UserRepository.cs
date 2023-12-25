@@ -19,7 +19,9 @@ namespace MagicVilla_VillaApi.Repository
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
         private readonly IMapper _mapper = mapper;
-        private readonly string secretKey = configuration.GetValue<string>("ApiSettings:Secret");
+
+
+        private readonly string secretKey = Environment.GetEnvironmentVariable("SECRET");
         public bool IsUniqueUser(string username)
         {
             var user = _db.ApplicationUsers.FirstOrDefault(user => user.UserName == username);
