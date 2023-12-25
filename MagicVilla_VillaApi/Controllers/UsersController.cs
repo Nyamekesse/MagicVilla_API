@@ -29,7 +29,7 @@ namespace MagicVilla_VillaApi.Controllers
                     _response.ErrorMessages = ["Invalid username or password"];
                     return _response;
                 }
-                loginResponse.User.Password = "";
+
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.IsSuccess = true;
                 _response.Result = loginResponse;
@@ -49,16 +49,16 @@ namespace MagicVilla_VillaApi.Controllers
 
 
         [HttpPost("signup")]
-        public async Task<ActionResult<APIResponse>> SignUp([FromBody] RegistrationRequestDTO registrationRequestDTO)
+        public async Task<ActionResult<APIResponse>> SignUp([FromBody] RegisterationRequestDTO registrationRequestDTO)
         {
             try
             {
-                bool ifUserNameUnique = _userRepository.IsUniqueUser(registrationRequestDTO.Username);
+                bool ifUserNameUnique = _userRepository.IsUniqueUser(registrationRequestDTO.UserName);
                 if (!ifUserNameUnique)
                 {
                     _response.IsSuccess = false;
                     _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.ErrorMessages = ["Username already exists"];
+                    _response.ErrorMessages = ["UserName already exists"];
                     return BadRequest(_response);
                 }
 
