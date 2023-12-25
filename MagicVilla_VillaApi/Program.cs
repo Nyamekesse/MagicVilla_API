@@ -21,7 +21,7 @@ var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
 var dbUserName = Environment.GetEnvironmentVariable("DB_USERNAME");
-// ... and so on
+
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDBContext>(option => { option.UseNpgsql($"Host={dbHost}; Database={dbName}; Username={dbUserName}; Password={dbPassword}"); });
 builder.Services.AddControllers().AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
