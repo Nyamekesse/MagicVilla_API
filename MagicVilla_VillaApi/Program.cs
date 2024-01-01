@@ -42,6 +42,7 @@ builder.Services.AddApiVersioning(options =>
 });
 builder.Services.AddVersionedApiExplorer(options => { options.GroupNameFormat = "'v'VVV"; options.SubstituteApiVersionInUrl = true; });
 var secretKey = Environment.GetEnvironmentVariable("SECRET");
+Console.WriteLine(secretKey);
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
