@@ -22,7 +22,7 @@ namespace MagicVilla_VillaApi.Controllers
             try
             {
                 var loginResponse = await _userRepository.Login(loginRequestDTO);
-                if (loginResponse.User == null || string.IsNullOrEmpty(loginResponse.Token))
+                if (loginResponse == null || string.IsNullOrEmpty(loginResponse.Token))
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
