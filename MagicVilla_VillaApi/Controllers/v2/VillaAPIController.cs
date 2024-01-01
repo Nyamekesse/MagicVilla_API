@@ -106,7 +106,7 @@ namespace MagicVilla_VillaApi.Controllers.v2
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CreateNewVilla([FromBody] VillaCreateDTO createDTO)
+        public async Task<ActionResult<APIResponse>> CreateNewVilla([FromForm] VillaCreateDTO createDTO)
         {
             try
             {
@@ -129,6 +129,34 @@ namespace MagicVilla_VillaApi.Controllers.v2
                 Villa villa = _mapper.Map<Villa>(createDTO);
 
                 await _dbVilla.CreateAsync(villa);
+                if (createDTO.Image != null)
+                {
+                    string fileName = villa.Id + Path.GetExtension(createDTO.Image.FileName);
+                    string filePath = @"wwwroot\ProductImage\" + fileName;
+
+                    var directoryLocation = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+                    FileInfo file = new(directoryLocation);
+                    if (file.Exists)
+                    {
+                        file.Delete();
+                    }
+
+                    using (var fileStream = new FileStream(directoryLocation, FileMode.Create))
+                    {
+                        createDTO.Image.CopyTo(fileStream);
+                    }
+                    var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+                    villa.ImageUrl = baseUrl + "/ProductImage/" + fileName;
+                    villa.ImageLocalPath = filePath;
+                }
+
+
+
+                else
+                {
+                    villa.ImageUrl = "https://placehold.co/600x400";
+                }
+                await _dbVilla.UpdateAsync(villa);
                 _response.Result = villa;
                 _response.StatusCode = HttpStatusCode.Created;
                 return _response;
