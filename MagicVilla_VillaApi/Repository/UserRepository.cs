@@ -91,14 +91,19 @@ namespace MagicVilla_VillaApi.Repository
                 SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
+
             var token = tokenHandler.CreateToken(tokenDescriptor);
             TokenDTO loginResponseDTO = new()
             {
                 Token = tokenHandler.WriteToken(token),
-
             };
 
             return loginResponseDTO;
+        }
+
+        public Task<TokenDTO> RefreshAccessToken(TokenDTO tokenDTO)
+        {
+            throw new NotImplementedException();
         }
     }
 }
