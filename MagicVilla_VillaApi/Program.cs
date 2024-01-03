@@ -1,5 +1,6 @@
 using MagicVilla_VillaApi;
 using MagicVilla_VillaApi.Data;
+using MagicVilla_VillaApi.Filters;
 using MagicVilla_VillaApi.Logging;
 using MagicVilla_VillaApi.Models;
 using MagicVilla_VillaApi.Repository;
@@ -25,7 +26,13 @@ var dbUserName = Environment.GetEnvironmentVariable("DB_USERNAME");
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDBContext>(option => { option.UseNpgsql($"Host={dbHost}; Database={dbName}; Username={dbUserName}; Password={dbPassword}"); });
-builder.Services.AddControllers().AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
+builder.Services.AddControllers(options => { options.Filters.Add<CustomExceptionFilter>(); }).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters().ConfigureApiBehaviorOptions(option =>
+{
+    option.ClientErrorMapping[StatusCodes.Status500InternalServerError] = new ClientErrorData
+    {
+        Link = "https://www.howtogeek.com/305093/what-is-a-500-internal-server-error-and-how-do-i-fix-it/"
+    };
+});
 builder.Services.AddScoped<IVillaRepository, VillaRepository>();
 builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -74,6 +81,8 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "Magic_VillaV1");
     options.SwaggerEndpoint("/swagger/v2/swagger.json", "Magic_VillaV2");
 });
+
+app.UseExceptionHandler("/ErrorHandling/ProcessError");
 
 app.UseStaticFiles();
 

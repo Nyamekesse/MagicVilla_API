@@ -46,7 +46,17 @@ namespace MagicVilla_VillaApi.Controllers
             return _response;
         }
 
+        [HttpGet("Error")]
+        public async Task<IActionResult> Error()
+        {
+            throw new FileNotFoundException();
+        }
 
+        [HttpGet("ImageError")]
+        public async Task<IActionResult> ImageError()
+        {
+            throw new BadImageFormatException("Fake Image Exception");
+        }
 
         [HttpPost("signup")]
         public async Task<ActionResult<APIResponse>> SignUp([FromBody] RegisterationRequestDTO registrationRequestDTO)
