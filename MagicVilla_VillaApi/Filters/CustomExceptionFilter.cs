@@ -19,7 +19,7 @@ namespace MagicVilla_VillaApi.Filters
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("test filter");
         }
     }
 }
